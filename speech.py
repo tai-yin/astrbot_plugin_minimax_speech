@@ -1,4 +1,4 @@
-"""MiniMax synchronous speech and the WAV contract used by QQ official bots.
+"""MiniMax synchronous speech and the WAV contract used by QQ voice.
 
 AstrBot 4.29.3's QQ official adapter (WebSocket and webhook share
 ``QQOfficialMessageEvent``) resolves a ``Record`` with
@@ -7,6 +7,12 @@ readable WAV, encodes it with ``pysilk`` (``tencent=True``), and uploads the
 Silk bytes to ``POST /v2/users/{openid}/files`` or
 ``POST /v2/groups/{group_openid}/files`` with ``file_type=3``. The send call
 then uses ``msg_type=7`` and ``media.file_info``.
+
+The OneBot adapter (``aiocqhttp``, including NapCat) does not use that
+upload. It base64-encodes the same WAV via ``Record.convert_to_base64``
+(``target_format="wav"``) and sends a record segment. NapCat then encodes
+Silk itself. The file must stay WAV: a Silk file here would be decoded as
+WAV by that adapter.
 
 This module asks MiniMax T2A v2 for 24 kHz mono 16-bit PCM, which is a rate
 the Silk encoder accepts without resampling, and wraps it in a WAV file.
@@ -45,6 +51,9 @@ SPEECH_MODEL = SPEECH_MODELS[0][0]
 # AstrBot 4.29.3 accepts: 8000, 12000, 16000, 24000, 32000, 48000.
 QQ_VOICE_SAMPLE_RATE = 24000
 QQ_OFFICIAL_PLATFORMS = frozenset({"qq_official", "qq_official_webhook"})
+# OneBot v11. NapCat, Lagrange, and LLOneBot all use this AstrBot adapter.
+AIOCQHTTP_PLATFORM = "aiocqhttp"
+SPEECH_PLATFORMS = QQ_OFFICIAL_PLATFORMS | frozenset({AIOCQHTTP_PLATFORM})
 # Keeps a voice reply inside a short QQ voice bubble. The text message is
 # not truncated; only the spoken copy is.
 MAX_SPEECH_CHARS = 400
@@ -99,6 +108,11 @@ class MinimaxSpeechError(Exception):
 
 def is_qq_official_platform(platform_name: str) -> bool:
     return platform_name in QQ_OFFICIAL_PLATFORMS
+
+
+def is_speech_platform(platform_name: str) -> bool:
+    """True for QQ official bots and the OneBot ``aiocqhttp`` adapter."""
+    return platform_name in SPEECH_PLATFORMS
 
 
 def normalize_api_base(url: str) -> str:

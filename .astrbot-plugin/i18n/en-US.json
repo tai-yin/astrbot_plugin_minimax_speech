@@ -1,8 +1,8 @@
 {
   "metadata": {
     "display_name": "MiniMax Speech",
-    "short_desc": "Send MiniMax voice messages from a QQ official bot.",
-    "desc": "Turn QQ official bot text replies into voice messages with MiniMax synchronous speech. Supports the Open Platform WebSocket and Webhook adapters."
+    "short_desc": "Send MiniMax voice messages from a QQ official bot or NapCat.",
+    "desc": "Turn QQ text replies into voice messages with MiniMax synchronous speech. Supports the Open Platform WebSocket and Webhook adapters, and OneBot (aiocqhttp, including NapCat)."
   },
   "config": {
     "api_key": {
@@ -52,7 +52,7 @@
     },
     "smart_agent": {
       "description": "Let the model choose",
-      "hint": "Adds one instruction on QQ official chats: start a reply with <voice-only/> when it is better heard than read. The marker is removed before the message is sent."
+      "hint": "Adds one instruction on QQ official chats and OneBot (aiocqhttp, including NapCat): start a reply with <voice-only/> when it is better heard than read. The marker is removed before the message is sent."
     },
     "smart_mirror_voice": {
       "description": "Answer voice with voice",

@@ -1,8 +1,8 @@
 {
   "metadata": {
     "display_name": "MiniMax 语音",
-    "short_desc": "让 QQ 官方机器人用 MiniMax 发送语音消息。",
-    "desc": "用 MiniMax 同步语音合成，把 QQ 官方机器人（Open Platform WebSocket / Webhook）的文字回复合成为语音消息。"
+    "short_desc": "让 QQ 官方机器人和 NapCat 用 MiniMax 发送语音消息。",
+    "desc": "用 MiniMax 同步语音合成，把 QQ 官方机器人（Open Platform WebSocket / Webhook）和 OneBot（aiocqhttp，含 NapCat）的文字回复合成为语音消息。"
   },
   "config": {
     "api_key": {
@@ -52,7 +52,7 @@
     },
     "smart_agent": {
       "description": "让模型决定",
-      "hint": "只在 QQ 官方会话里加一句说明：更适合听的回复以 <voice-only/> 开头。这个标记会在发送前去掉。"
+      "hint": "在 QQ 官方会话和 OneBot（aiocqhttp，含 NapCat）里加一句说明：更适合听的回复以 <voice-only/> 开头。这个标记会在发送前去掉。"
     },
     "smart_mirror_voice": {
       "description": "用语音回复语音",

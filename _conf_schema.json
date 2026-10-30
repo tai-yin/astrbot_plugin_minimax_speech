@@ -63,7 +63,7 @@
   "smart_agent": {
     "description": "Let the model choose",
     "type": "bool",
-    "hint": "Adds one instruction on QQ official chats: start a reply with <voice-only/> when it is better heard than read. The marker is removed before the message is sent.",
+    "hint": "Adds one instruction on QQ official chats and OneBot (aiocqhttp, including NapCat): start a reply with <voice-only/> when it is better heard than read. The marker is removed before the message is sent.",
     "default": true,
     "condition": {
       "reply_mode": "smart"

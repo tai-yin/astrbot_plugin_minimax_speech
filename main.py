@@ -1,8 +1,9 @@
-"""Speak QQ official-bot replies with MiniMax.
+"""Speak QQ replies with MiniMax.
 
-The plugin only runs on the QQ Open Platform adapters (``qq_official`` and
-``qq_official_webhook``). It appends a 24 kHz PCM WAV ``Record``. AstrBot
-encodes that file as Tencent Silk and uploads it as a voice message.
+The plugin runs on the QQ Open Platform adapters (``qq_official`` and
+``qq_official_webhook``) and on OneBot (``aiocqhttp``, including NapCat).
+It appends a 24 kHz PCM WAV ``Record``. The official adapter encodes that
+file as Tencent Silk. The OneBot adapter sends the WAV; NapCat encodes Silk.
 """
 
 from __future__ import annotations
@@ -23,7 +24,7 @@ try:
         SpeechClient,
         apply_api_base_dropdown,
         apply_voice_dropdown,
-        is_qq_official_platform,
+        is_speech_platform,
         iter_voice_selectors,
         normalize_api_base,
         normalize_speech_model,
@@ -49,7 +50,7 @@ except ImportError as exc:  # AstrBot loads main.py both as a package and by pat
         SpeechClient,
         apply_api_base_dropdown,
         apply_voice_dropdown,
-        is_qq_official_platform,
+        is_speech_platform,
         iter_voice_selectors,
         normalize_api_base,
         normalize_speech_model,
@@ -92,7 +93,7 @@ def _request_locale(request_obj: object, body: dict | None) -> str:
 
 
 class Main(Star):
-    """Attach a MiniMax voice to QQ official bot replies."""
+    """Attach a MiniMax voice to QQ official and OneBot replies."""
 
     def __init__(self, context: Context, config: AstrBotConfig):
         super().__init__(context)
@@ -453,8 +454,10 @@ class Main(Star):
     async def tts_command(self, event: AstrMessageEvent):
         """把后面的文字合成为一条 QQ 语音。"""
         self._remember(event)
-        if not is_qq_official_platform(event.get_platform_name() or ""):
-            yield event.plain_result("语音只在 QQ 官方机器人（含 Webhook）里发送。")
+        if not is_speech_platform(event.get_platform_name() or ""):
+            yield event.plain_result(
+                "语音只在 QQ 官方机器人（含 Webhook）和 OneBot（aiocqhttp，含 NapCat）里发送。"
+            )
             return
         raw = (event.message_str or "").strip()
         if raw.startswith("/tts"):
@@ -491,10 +494,10 @@ class Main(Star):
 
     @filter.on_llm_request()
     async def on_llm_request(self, event: AstrMessageEvent, req) -> None:
-        """Ask the model to mark replies that should be heard, on QQ official only."""
+        """Ask the model to mark replies that should be heard, on supported QQ chats."""
         if self._reply_mode() != "smart" or not self._enabled("smart_agent", True):
             return
-        if not is_qq_official_platform(event.get_platform_name() or ""):
+        if not is_speech_platform(event.get_platform_name() or ""):
             return
         prompt = str(getattr(req, "system_prompt", "") or "")
         if "<voice-only/>" in prompt:
@@ -504,7 +507,7 @@ class Main(Star):
     @filter.on_llm_response(priority=100000)
     async def on_llm_response(self, event: AstrMessageEvent, response) -> None:
         """Remove the voice marker before other plugins read the model reply."""
-        if not is_qq_official_platform(event.get_platform_name() or ""):
+        if not is_speech_platform(event.get_platform_name() or ""):
             return
         found = False
         chain = getattr(getattr(response, "result_chain", None), "chain", None)
@@ -528,11 +531,11 @@ class Main(Star):
 
     @filter.on_decorating_result()
     async def on_decorating_result(self, event: AstrMessageEvent) -> None:
-        """Speak an LLM reply on the QQ official bot, without touching other plugins."""
+        """Speak an LLM reply on a supported QQ bot, without touching other plugins."""
         if id(event) in self._handled_events:
             self._handled_events.discard(id(event))
             return
-        if not is_qq_official_platform(event.get_platform_name() or ""):
+        if not is_speech_platform(event.get_platform_name() or ""):
             return
         result = event.get_result()
         chain = getattr(result, "chain", None) if result is not None else None
@@ -613,4 +616,4 @@ class Main(Star):
                 component for component in chain if not isinstance(component, Plain)
             ]
         chain.append(Record(file=wav_path, url=wav_path))
-        logger.info("[minimax-speech] attached voice for QQ official bot")
+        logger.info("[minimax-speech] attached voice")

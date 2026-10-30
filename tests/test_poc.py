@@ -29,6 +29,7 @@ from speech import (
     QQ_VOICE_SAMPLE_RATE,
     SPEECH_MODEL,
     SPEECH_MODELS,
+    SPEECH_PLATFORMS,
     MinimaxSpeechError,
     SpeechClient,
     apply_api_base_dropdown,
@@ -36,6 +37,7 @@ from speech import (
     build_t2a_payload,
     decode_audio_field,
     is_qq_official_platform,
+    is_speech_platform,
     iter_voice_selectors,
     normalize_api_base,
     normalize_speech_model,
@@ -245,6 +247,11 @@ def test_qq_official_platforms_include_webhook() -> None:
     assert is_qq_official_platform("qq_official_webhook")
     assert not is_qq_official_platform("aiocqhttp")
     assert QQ_OFFICIAL_PLATFORMS == {"qq_official", "qq_official_webhook"}
+    assert is_speech_platform("qq_official")
+    assert is_speech_platform("qq_official_webhook")
+    assert is_speech_platform("aiocqhttp")
+    assert not is_speech_platform("telegram")
+    assert SPEECH_PLATFORMS == QQ_OFFICIAL_PLATFORMS | {"aiocqhttp"}
 
 
 def test_wav_encodes_to_tencent_silk() -> None:
@@ -506,6 +513,26 @@ def test_plugin_attaches_voice_for_webhook_and_skips_other_platforms() -> None:
             await plugin.on_decorating_result(telegram)
             assert len(telegram.result.chain) == 1
 
+            onebot = Event("aiocqhttp", [main.Plain("你好，NapCat。")])
+            await plugin.on_decorating_result(onebot)
+            assert len(onebot.result.chain) == 2
+            onebot_record = onebot.result.chain[1]
+            assert isinstance(onebot_record, main.Record)
+            assert onebot_record.file == onebot_record.url
+            assert onebot_record.file.endswith(".wav")
+            assert wav_info(Path(onebot_record.file).read_bytes())[:3] == (1, 2, 24000)
+            assert server.requests[-1]["json"]["text"] == "你好，NapCat。"
+
+            onebot_tts = Event("aiocqhttp", [], message_str="/tts 协议端语音")
+            yielded = [item async for item in plugin.tts_command(onebot_tts)]
+            assert yielded[0][0] == "chain"
+            assert isinstance(yielded[0][1][1], main.Record)
+
+            refused = Event("telegram", [], message_str="/tts 不该读")
+            yielded = [item async for item in plugin.tts_command(refused)]
+            assert yielded[0][0] == "plain"
+            assert "aiocqhttp" in yielded[0][1]
+
             image_reply = Event(
                 "qq_official",
                 [main.Plain("看图"), main.Image(file="pic.png")],
@@ -622,6 +649,9 @@ def test_plugin_attaches_voice_for_webhook_and_skips_other_platforms() -> None:
             req = types.SimpleNamespace(system_prompt="你是助手。")
             await plugin.on_llm_request(Event("qq_official", []), req)
             assert "<voice-only/>" in req.system_prompt
+            napcat_req = types.SimpleNamespace(system_prompt="你是助手。")
+            await plugin.on_llm_request(Event("aiocqhttp", []), napcat_req)
+            assert "<voice-only/>" in napcat_req.system_prompt
             again = types.SimpleNamespace(system_prompt=req.system_prompt)
             await plugin.on_llm_request(Event("qq_official", []), again)
             assert again.system_prompt == req.system_prompt

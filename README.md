@@ -4,14 +4,15 @@
 
 ## 中文
 
-AstrBot 插件。用 [MiniMax 同步语音合成](https://platform.minimaxi.com/docs/api-reference/speech-t2a-http) 把 QQ 官方机器人的文字回复合成为语音消息。
+AstrBot 插件。用 [MiniMax 同步语音合成](https://platform.minimaxi.com/docs/api-reference/speech-t2a-http) 把 QQ 文字回复合成为语音消息。
 
-支持两个 Open Platform 适配器：
+支持这些适配器：
 
 - `qq_official`（WebSocket）
 - `qq_official_webhook`（Webhook）
+- `aiocqhttp`（OneBot，含 NapCat）
 
-Webhook 事件类继承同一个发送器，因此两种适配器上传语音的方式相同。
+Webhook 事件类继承同一个发送器，因此两种官方适配器上传语音的方式相同。
 
 ### 发送内容
 
@@ -23,6 +24,8 @@ AstrBot 4.29.3 随后会：
 2. 用 `pysilk`（`tencent=True`）编码，并加上 QQ Silk 文件头。
 3. 以语音（`file_type=3`）上传到 `POST /v2/users/{openid}/files` 或 `POST /v2/groups/{group_openid}/files`。
 4. 用 `msg_type=7` 和 `media.file_info` 发送。
+
+`aiocqhttp` 把同一条 WAV 转成 base64 发给协议端。NapCat 收到语音段后自己编码成 Silk。插件不在这条路径上再转一次 Silk，否则适配器会把文件当成 WAV 再读一遍。
 
 原文字默认和语音留在同一条消息里。回复方式可以改成只发语音，或按条件只发语音，见下方。带图片、视频或文件的回复不会被改成语音。朗读文本最多 400 字；默认模式下界面上的文字不会被截断。
 
@@ -51,7 +54,7 @@ AstrBot 4.29.3 随后会：
 | `smart_keywords` | `语音,说给我听,读给我听,念给我听,voice` | 用户消息包含其中一句时，只回语音。 |
 | `smart_fallback` | `both` | 智能模式没有触发时：文字加语音，或只发文字。 |
 
-这些规则只作用在 QQ 官方机器人的模型回复上。其他插件的命令回复保持原样。已经带图片、语音、视频或文件的回复也不改。
+这些规则只作用在上面列出的 QQ 适配器的模型回复上。其他插件的命令回复保持原样。已经带图片、语音、视频或文件的回复也不改。
 
 仅语音会在整段都能朗读时去掉文字。回复太长，或带有链接、代码时，文字会留下来，避免把内容念丢。语音合成失败时同样保留原文。
 
@@ -59,7 +62,7 @@ AstrBot 4.29.3 随后会：
 
 把本仓库放到 AstrBot 的 `data/plugins/astrbot_plugin_minimax_speech` 并重载插件，然后填写 API 密钥。
 
-- 回复方式为「文字和语音」时，QQ 官方机器人的模型回复会自动朗读。
+- 回复方式为「文字和语音」时，上面列出的 QQ 适配器的模型回复会自动朗读。
 - 智能模式只在模型标记、用户发来语音，或命中关键词时只发语音。
 - `/tts 要朗读的文字` 按需朗读这段文字。仅语音和智能模式下这条命令只发语音。
 
@@ -73,18 +76,19 @@ AstrBot 4.29.3 随后会：
 
 页面上的金额是 2026-10-30 的标价估算。中国站一个汉字计 2 个字符。MiniMax 没有公开余额接口，所以页头的累计金额只统计从本页发出的调用，账单以 MiniMax 控制台为准。
 
-AstrBot 需要能导入 `pysilk`（`silk-python`），官方适配器用它生成语音文件。流式回复会跳过 `on_decorating_result`。如果自动语音没有附上，请关闭流式输出。
+官方适配器需要能导入 `pysilk`（`silk-python`）才能生成语音文件。NapCat 在协议端自己把 WAV 转成 Silk，这条路径不依赖 AstrBot 里的 `pysilk`。流式回复会跳过 `on_decorating_result`。如果自动语音没有附上，请关闭流式输出。
 
 ## English
 
-An AstrBot plugin that turns a QQ official bot reply into a voice message with [MiniMax synchronous speech](https://platform.minimax.io/docs/api-reference/speech-t2a-http).
+An AstrBot plugin that turns a QQ reply into a voice message with [MiniMax synchronous speech](https://platform.minimax.io/docs/api-reference/speech-t2a-http).
 
-It supports both Open Platform adapters:
+It supports these adapters:
 
 - `qq_official` (WebSocket)
 - `qq_official_webhook` (Webhook)
+- `aiocqhttp` (OneBot, including NapCat)
 
-The webhook event class subclasses the same sender as the WebSocket adapter, so both upload voice the same way.
+The webhook event class subclasses the same sender as the WebSocket adapter, so both official adapters upload voice the same way.
 
 ### What it sends
 
@@ -96,6 +100,8 @@ AstrBot 4.29.3 then:
 2. Encodes it with `pysilk` (`tencent=True`), which prefixes the QQ Silk header.
 3. Uploads it as voice (`file_type=3`) to `POST /v2/users/{openid}/files` or `POST /v2/groups/{group_openid}/files`.
 4. Sends `msg_type=7` with `media.file_info`.
+
+`aiocqhttp` base64-encodes that same WAV and sends a record segment. NapCat encodes Silk on its side. The plugin does not encode Silk for this path, because the adapter would then try to read the file as WAV.
 
 The original text stays in the same message by default. Reply mode can send voice alone, or only when a condition matches. Image, video, and file replies are left unchanged. Spoken text is capped at 400 characters; in the default mode the visible text is not cut.
 
@@ -124,7 +130,7 @@ GroupId is not sent. The current T2A spec authenticates with the Bearer token on
 | `smart_keywords` | `语音,说给我听,读给我听,念给我听,voice` | A user message containing one of these gets a voice-only reply. |
 | `smart_fallback` | `both` | When smart mode does not trigger: text and voice, or text only. |
 
-These rules apply only to model replies on a QQ official bot. Command replies from other plugins are left unchanged, as are replies that already contain an image, voice, video, or file.
+These rules apply only to model replies on the QQ adapters listed above. Command replies from other plugins are left unchanged, as are replies that already contain an image, voice, video, or file.
 
 Voice only drops the text when the whole reply can be spoken. A reply that is too long, or that contains a link or code, keeps its text so nothing is lost. A failed synthesis keeps the text too.
 
@@ -132,7 +138,7 @@ Voice only drops the text when the whole reply can be spoken. A reply that is to
 
 Put this repository in AstrBot `data/plugins/astrbot_plugin_minimax_speech` and reload the plugin. Fill in the API key.
 
-- With reply mode set to text and voice, model replies on a QQ official bot are spoken automatically.
+- With reply mode set to text and voice, model replies on the QQ adapters listed above are spoken automatically.
 - Smart mode sends voice alone only when the model marks the reply, the user sent a voice, or a keyword matches.
 - `/tts 要朗读的文字` speaks that text on demand. Voice only and smart mode send the voice without the text.
 
@@ -146,7 +152,7 @@ Clone and design create a **draft**. Previewing a draft does not charge the one-
 
 Amounts on the page are estimates from list prices checked on 2026-10-30. On the China host a Chinese character counts as 2. MiniMax has no public balance API, so the total at the top only adds up calls made from this page. The billing console is the record of what was charged.
 
-AstrBot must be able to import `pysilk` (`silk-python`). That is how the official adapter builds the voice file. Streaming replies skip `on_decorating_result`, so turn streaming off if automatic voice does not attach.
+The official adapter must be able to import `pysilk` (`silk-python`) to build the voice file. NapCat encodes the WAV to Silk itself, so that path does not need `pysilk` inside AstrBot. Streaming replies skip `on_decorating_result`, so turn streaming off if automatic voice does not attach.
 
 ## Development test
 

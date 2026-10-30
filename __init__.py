@@ -1,1 +1,1 @@
-"""MiniMax speech plugin for AstrBot QQ official bots."""
+"""MiniMax speech plugin for AstrBot QQ official bots and OneBot."""
