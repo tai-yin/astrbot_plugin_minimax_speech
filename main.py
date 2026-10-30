@@ -13,7 +13,7 @@ from pathlib import Path
 
 from astrbot.api import AstrBotConfig, logger
 from astrbot.api.event import AstrMessageEvent, filter
-from astrbot.api.message_components import File, Image, Plain, Record, Video
+from astrbot.api.message_components import At, File, Image, Plain, Record, Reply, Video
 from astrbot.api.star import Context, Star
 
 try:
@@ -67,7 +67,9 @@ except ImportError as exc:  # AstrBot loads main.py both as a package and by pat
         normalize_locale,
     )
 
-_MEDIA = (Image, Video, File, Record)
+# A voice or file already in the reply is left alone. An image, such as a
+# meme, still gets a voice beside it.
+_BLOCKING_MEDIA = (Video, File, Record)
 
 
 def _web():
@@ -539,7 +541,7 @@ class Main(Star):
             return
         result = event.get_result()
         chain = getattr(result, "chain", None) if result is not None else None
-        if not chain or any(isinstance(component, _MEDIA) for component in chain):
+        if not chain or any(isinstance(component, _BLOCKING_MEDIA) for component in chain):
             return
         content_type = self._content_type_name(result)
         streaming = content_type in {"STREAMING_RESULT", "STREAMING_FINISH"}
@@ -552,7 +554,7 @@ class Main(Star):
         mode = self._reply_mode()
         if streaming:
             if mode == "both":
-                await self._attach_voice(chain, drop_text=False)
+                await self._attach_voice(event, chain, drop_text=False)
             return
         getter = getattr(event, "get_extra", None)
         agent = marked or (
@@ -574,7 +576,7 @@ class Main(Star):
         )
         if decision == "text":
             return
-        await self._attach_voice(chain, drop_text=decision == "voice")
+        await self._attach_voice(event, chain, drop_text=decision == "voice")
 
     @staticmethod
     def _strip_marker(chain: list) -> bool:
@@ -594,7 +596,70 @@ class Main(Star):
             ]
         return found
 
-    async def _attach_voice(self, chain: list, *, drop_text: bool) -> None:
+    def _platform_settings(self, event: AstrMessageEvent) -> dict:
+        getter = getattr(self.context, "get_config", None)
+        if not callable(getter):
+            return {}
+        umo = getattr(event, "unified_msg_origin", None)
+        try:
+            config = getter(umo=umo) if umo else getter()
+        except Exception:  # noqa: BLE001
+            return {}
+        if not hasattr(config, "get"):
+            return {}
+        settings = config.get("platform_settings")
+        return settings if isinstance(settings, dict) else {}
+
+    @staticmethod
+    def _message_type_name(event: AstrMessageEvent) -> str:
+        getter = getattr(event, "get_message_type", None)
+        if not callable(getter):
+            return ""
+        value = getter()
+        return str(getattr(value, "name", value) or "")
+
+    def _keep_quote(self, event: AstrMessageEvent, chain: list) -> None:
+        """Add the quote AstrBot would add after this hook.
+
+        AstrBot quotes a reply only when every part is text or an image. The
+        voice record appended below would otherwise remove that quote.
+        """
+        allowed = (Plain, Image, At, Reply)
+        if any(not isinstance(component, allowed) for component in chain):
+            return
+        settings = self._platform_settings(event)
+        if not settings:
+            return
+        message_type = self._message_type_name(event)
+        if (
+            settings.get("reply_with_mention")
+            and message_type
+            and message_type != "FRIEND_MESSAGE"
+            and not any(isinstance(component, At) for component in chain)
+        ):
+            sender_id = getattr(event, "get_sender_id", None)
+            sender_name = getattr(event, "get_sender_name", None)
+            chain.insert(
+                0,
+                At(
+                    qq=str(sender_id() or "") if callable(sender_id) else "",
+                    name=str(sender_name() or "") if callable(sender_name) else "",
+                ),
+            )
+            if len(chain) > 1 and isinstance(chain[1], Plain):
+                chain[1].text = "\n" + (chain[1].text or "")
+        if settings.get("reply_with_quote") and not any(
+            isinstance(component, Reply) for component in chain
+        ):
+            message_id = getattr(
+                getattr(event, "message_obj", None), "message_id", None
+            )
+            if message_id:
+                chain.insert(0, Reply(id=str(message_id)))
+
+    async def _attach_voice(
+        self, event: AstrMessageEvent, chain: list, *, drop_text: bool
+    ) -> None:
         text = "".join(
             component.text or "" for component in chain if isinstance(component, Plain)
         )
@@ -615,5 +680,6 @@ class Main(Star):
             chain[:] = [
                 component for component in chain if not isinstance(component, Plain)
             ]
+        self._keep_quote(event, chain)
         chain.append(Record(file=wav_path, url=wav_path))
         logger.info("[minimax-speech] attached voice")

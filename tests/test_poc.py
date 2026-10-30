@@ -413,6 +413,15 @@ def _install_astrbot_stub() -> None:
         def __init__(self, file: str = "", **_kwargs) -> None:
             self.file = file
 
+    class At:
+        def __init__(self, qq: str = "", name: str = "", **_kwargs) -> None:
+            self.qq = qq
+            self.name = name
+
+    class Reply:
+        def __init__(self, id: str = "", **_kwargs) -> None:
+            self.id = id
+
     class Star:
         def __init__(self, context) -> None:
             self.context = context
@@ -422,6 +431,8 @@ def _install_astrbot_stub() -> None:
     components.Plain = Plain
     components.Record = Record
     components.Image = Image
+    components.At = At
+    components.Reply = Reply
     components.Video = type("Video", (), {})
     components.File = type("File", (), {})
     star_mod.Context = object
@@ -538,7 +549,12 @@ def test_plugin_attaches_voice_for_webhook_and_skips_other_platforms() -> None:
                 [main.Plain("看图"), main.Image(file="pic.png")],
             )
             await plugin.on_decorating_result(image_reply)
-            assert len(image_reply.result.chain) == 2
+            assert [type(item) for item in image_reply.result.chain] == [
+                main.Plain,
+                main.Image,
+                main.Record,
+            ]
+            assert server.requests[-1]["json"]["text"] == "看图"
 
             command = Event("qq_official", [], message_str="/tts 测试语音")
             yielded = [item async for item in plugin.tts_command(command)]
@@ -598,6 +614,31 @@ def test_plugin_attaches_voice_for_webhook_and_skips_other_platforms() -> None:
             assert len(meme.result.chain) == 2
             assert isinstance(meme.result.chain[1], main.Image)
 
+            plugin.config["reply_mode"] = "both"
+            quoted = Event("qq_official", [main.Plain("接着说。")])
+            quoted.message_obj.message_id = "quoted-message"
+            quoted.unified_msg_origin = "qq:FriendMessage:1"
+
+            class QuoteContext:
+                def get_config(self, umo=None):
+                    assert umo == "qq:FriendMessage:1"
+                    return {
+                        "platform_settings": {
+                            "reply_with_quote": True,
+                            "reply_with_mention": True,
+                        }
+                    }
+
+            plugin.context = QuoteContext()
+            await plugin.on_decorating_result(quoted)
+            assert isinstance(quoted.result.chain[0], main.Reply)
+            assert quoted.result.chain[0].id == "quoted-message"
+            assert isinstance(quoted.result.chain[1], main.Plain)
+            assert quoted.result.chain[1].text == "接着说。"
+            assert isinstance(quoted.result.chain[2], main.Record)
+            assert server.requests[-1]["json"]["text"] == "接着说。"
+
+            plugin.config["reply_mode"] = "voice"
             stream = Event(
                 "qq_official",
                 [main.Plain("流式文字还在。")],

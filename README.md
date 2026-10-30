@@ -27,7 +27,7 @@ AstrBot 4.29.3 随后会：
 
 `aiocqhttp` 把同一条 WAV 转成 base64 发给协议端。NapCat 收到语音段后自己编码成 Silk。插件不在这条路径上再转一次 Silk，否则适配器会把文件当成 WAV 再读一遍。
 
-原文字默认和语音留在同一条消息里。回复方式可以改成只发语音，或按条件只发语音，见下方。带图片、视频或文件的回复不会被改成语音。朗读文本最多 400 字；默认模式下界面上的文字不会被截断。
+原文字默认和语音留在同一条消息里。回复方式可以改成只发语音，或按条件只发语音，见下方。带表情图片的文字回复仍会附上语音，引用回复也会保留。已经带语音、视频或文件的回复不改。朗读文本最多 400 字；默认模式下界面上的文字不会被截断。
 
 ### 配置
 
@@ -54,7 +54,7 @@ AstrBot 4.29.3 随后会：
 | `smart_keywords` | `语音,说给我听,读给我听,念给我听,voice` | 用户消息包含其中一句时，只回语音。 |
 | `smart_fallback` | `both` | 智能模式没有触发时：文字加语音，或只发文字。 |
 
-这些规则只作用在上面列出的 QQ 适配器的模型回复上。其他插件的命令回复保持原样。已经带图片、语音、视频或文件的回复也不改。
+这些规则只作用在上面列出的 QQ 适配器的模型回复上。其他插件的命令回复保持原样。已经带语音、视频或文件的回复不改。表情图片会留在消息里，语音加在后面。
 
 仅语音会在整段都能朗读时去掉文字。回复太长，或带有链接、代码时，文字会留下来，避免把内容念丢。语音合成失败时同样保留原文。
 
@@ -103,7 +103,7 @@ AstrBot 4.29.3 then:
 
 `aiocqhttp` base64-encodes that same WAV and sends a record segment. NapCat encodes Silk on its side. The plugin does not encode Silk for this path, because the adapter would then try to read the file as WAV.
 
-The original text stays in the same message by default. Reply mode can send voice alone, or only when a condition matches. Image, video, and file replies are left unchanged. Spoken text is capped at 400 characters; in the default mode the visible text is not cut.
+The original text stays in the same message by default. Reply mode can send voice alone, or only when a condition matches. A reply that includes a meme image still gets a voice, and a quote of an earlier message stays in place. A reply that already contains a voice, video, or file is left unchanged. Spoken text is capped at 400 characters; in the default mode the visible text is not cut.
 
 ### Configuration
 
@@ -130,7 +130,7 @@ GroupId is not sent. The current T2A spec authenticates with the Bearer token on
 | `smart_keywords` | `语音,说给我听,读给我听,念给我听,voice` | A user message containing one of these gets a voice-only reply. |
 | `smart_fallback` | `both` | When smart mode does not trigger: text and voice, or text only. |
 
-These rules apply only to model replies on the QQ adapters listed above. Command replies from other plugins are left unchanged, as are replies that already contain an image, voice, video, or file.
+These rules apply only to model replies on the QQ adapters listed above. Command replies from other plugins are left unchanged, as are replies that already contain a voice, video, or file. A meme image stays in the message, and the voice is added after it.
 
 Voice only drops the text when the whole reply can be spoken. A reply that is too long, or that contains a link or code, keeps its text so nothing is lost. A failed synthesis keeps the text too.
 
