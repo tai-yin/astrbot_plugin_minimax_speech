@@ -1,0 +1,11 @@
+name: astrbot_plugin_minimax_speech
+display_name: MiniMax 语音
+desc: 用 MiniMax 同步语音合成，把 QQ 官方机器人（Open Platform WebSocket / Webhook）的文字回复合成为语音消息。
+short_desc: 让 QQ 官方机器人用 MiniMax 发送语音消息。
+version: v0.1.0
+author: tai-yin
+repo: https://github.com/tai-yin/astrbot_plugin_minimax_speech
+astrbot_version: ">=4.16,<5"
+support_platforms:
+  - qq_official
+  - qq_official_webhook

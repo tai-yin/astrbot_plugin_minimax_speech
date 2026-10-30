@@ -1,0 +1,1795 @@
+{
+  "api_key": {
+    "description": "MiniMax API Key",
+    "type": "string",
+    "hint": "MiniMax API key. Requests use Authorization: Bearer and the API host selected below.",
+    "obvious_hint": true,
+    "secret": true,
+    "default": ""
+  },
+  "api_base": {
+    "description": "API host",
+    "type": "string",
+    "hint": "Save, then reopen this page. The voice list is loaded from the selected host, and the API key must be issued for that host.",
+    "options": ["https://api.minimax.io", "https://api.minimax.cn"],
+    "labels": ["International", "China"],
+    "subtitles": ["https://api.minimax.io", "https://api.minimax.cn"],
+    "default": "https://api.minimax.io"
+  },
+  "model": {
+    "description": "Model",
+    "type": "string",
+    "hint": "Speech model sent to T2A. HD costs more than Turbo on both hosts.",
+    "options": [
+      "speech-2.8-hd",
+      "speech-2.8-turbo",
+      "speech-2.6-hd",
+      "speech-2.6-turbo",
+      "speech-02-hd",
+      "speech-02-turbo",
+      "speech-01-hd",
+      "speech-01-turbo"
+    ],
+    "labels": [
+      "Speech 2.8 HD",
+      "Speech 2.8 Turbo",
+      "Speech 2.6 HD",
+      "Speech 2.6 Turbo",
+      "Speech 02 HD",
+      "Speech 02 Turbo",
+      "Speech 01 HD",
+      "Speech 01 Turbo"
+    ],
+    "subtitles": [
+      "Higher quality",
+      "Faster and lower cost",
+      "Previous HD",
+      "Previous Turbo",
+      "Older HD",
+      "Older Turbo",
+      "Oldest HD",
+      "Oldest Turbo"
+    ],
+    "default": "speech-2.8-hd"
+  },
+  "reply_mode": {
+    "description": "Reply mode",
+    "type": "string",
+    "hint": "Text and voice sends both. Voice only drops the text when the whole reply can be spoken. Smart speaks alone when the model, a voice message, or a keyword asks for it.",
+    "options": ["both", "voice", "smart"],
+    "labels": ["Text and voice", "Voice only", "Smart"],
+    "default": "both"
+  },
+  "smart_agent": {
+    "description": "Let the model choose",
+    "type": "bool",
+    "hint": "Adds one instruction on QQ official chats: start a reply with <voice-only/> when it is better heard than read. The marker is removed before the message is sent.",
+    "default": true,
+    "condition": {
+      "reply_mode": "smart"
+    }
+  },
+  "smart_mirror_voice": {
+    "description": "Answer voice with voice",
+    "type": "bool",
+    "hint": "When the user sends a voice message, reply with voice only.",
+    "default": true,
+    "condition": {
+      "reply_mode": "smart"
+    }
+  },
+  "smart_keywords": {
+    "description": "Voice keywords",
+    "type": "string",
+    "hint": "If the user's message contains one of these, reply with voice only. Separate phrases with commas.",
+    "default": "语音,说给我听,读给我听,念给我听,voice",
+    "condition": {
+      "reply_mode": "smart"
+    }
+  },
+  "smart_fallback": {
+    "description": "When smart does not trigger",
+    "type": "string",
+    "hint": "Used when the model, the user's voice, and the keywords all stay quiet. Text only skips the speech call.",
+    "options": ["both", "text"],
+    "labels": ["Text and voice", "Text only"],
+    "default": "both",
+    "condition": {
+      "reply_mode": "smart"
+    }
+  },
+  "language": {
+    "description": "Language",
+    "type": "string",
+    "hint": "The voice list updates when this changes. Taken from the voice id prefix.",
+    "options": [
+      "any"
+    ],
+    "labels": [
+      "Any"
+    ],
+    "default": "any"
+  },
+  "gender": {
+    "description": "Gender",
+    "type": "string",
+    "hint": "The voice list updates when this changes. Inferred from the voice name.",
+    "options": [
+      "any",
+      "female",
+      "male",
+      "unknown"
+    ],
+    "labels": [
+      "Any",
+      "Female",
+      "Male",
+      "Unspecified"
+    ],
+    "default": "any"
+  },
+  "voice_id": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "male-qn-qingse",
+    "condition": {
+      "language": "any",
+      "gender": "any"
+    }
+  },
+  "voice_any_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "any",
+      "gender": "female"
+    }
+  },
+  "voice_any_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "any",
+      "gender": "male"
+    }
+  },
+  "voice_any_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "any",
+      "gender": "unknown"
+    }
+  },
+  "voice_chinese_mandarin_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Chinese (Mandarin)",
+      "gender": "any"
+    }
+  },
+  "voice_chinese_mandarin_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Chinese (Mandarin)",
+      "gender": "female"
+    }
+  },
+  "voice_chinese_mandarin_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Chinese (Mandarin)",
+      "gender": "male"
+    }
+  },
+  "voice_chinese_mandarin_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Chinese (Mandarin)",
+      "gender": "unknown"
+    }
+  },
+  "voice_arabic_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Arabic",
+      "gender": "any"
+    }
+  },
+  "voice_arabic_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Arabic",
+      "gender": "female"
+    }
+  },
+  "voice_arabic_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Arabic",
+      "gender": "male"
+    }
+  },
+  "voice_arabic_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Arabic",
+      "gender": "unknown"
+    }
+  },
+  "voice_cantonese_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Cantonese",
+      "gender": "any"
+    }
+  },
+  "voice_cantonese_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Cantonese",
+      "gender": "female"
+    }
+  },
+  "voice_cantonese_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Cantonese",
+      "gender": "male"
+    }
+  },
+  "voice_cantonese_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Cantonese",
+      "gender": "unknown"
+    }
+  },
+  "voice_czech_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Czech",
+      "gender": "any"
+    }
+  },
+  "voice_czech_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Czech",
+      "gender": "female"
+    }
+  },
+  "voice_czech_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Czech",
+      "gender": "male"
+    }
+  },
+  "voice_czech_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Czech",
+      "gender": "unknown"
+    }
+  },
+  "voice_dutch_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Dutch",
+      "gender": "any"
+    }
+  },
+  "voice_dutch_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Dutch",
+      "gender": "female"
+    }
+  },
+  "voice_dutch_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Dutch",
+      "gender": "male"
+    }
+  },
+  "voice_dutch_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Dutch",
+      "gender": "unknown"
+    }
+  },
+  "voice_english_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "English",
+      "gender": "any"
+    }
+  },
+  "voice_english_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "English",
+      "gender": "female"
+    }
+  },
+  "voice_english_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "English",
+      "gender": "male"
+    }
+  },
+  "voice_english_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "English",
+      "gender": "unknown"
+    }
+  },
+  "voice_finnish_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Finnish",
+      "gender": "any"
+    }
+  },
+  "voice_finnish_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Finnish",
+      "gender": "female"
+    }
+  },
+  "voice_finnish_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Finnish",
+      "gender": "male"
+    }
+  },
+  "voice_finnish_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Finnish",
+      "gender": "unknown"
+    }
+  },
+  "voice_french_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "French",
+      "gender": "any"
+    }
+  },
+  "voice_french_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "French",
+      "gender": "female"
+    }
+  },
+  "voice_french_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "French",
+      "gender": "male"
+    }
+  },
+  "voice_french_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "French",
+      "gender": "unknown"
+    }
+  },
+  "voice_german_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "German",
+      "gender": "any"
+    }
+  },
+  "voice_german_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "German",
+      "gender": "female"
+    }
+  },
+  "voice_german_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "German",
+      "gender": "male"
+    }
+  },
+  "voice_german_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "German",
+      "gender": "unknown"
+    }
+  },
+  "voice_greek_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Greek",
+      "gender": "any"
+    }
+  },
+  "voice_greek_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Greek",
+      "gender": "female"
+    }
+  },
+  "voice_greek_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Greek",
+      "gender": "male"
+    }
+  },
+  "voice_greek_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Greek",
+      "gender": "unknown"
+    }
+  },
+  "voice_hindi_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Hindi",
+      "gender": "any"
+    }
+  },
+  "voice_hindi_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Hindi",
+      "gender": "female"
+    }
+  },
+  "voice_hindi_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Hindi",
+      "gender": "male"
+    }
+  },
+  "voice_hindi_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Hindi",
+      "gender": "unknown"
+    }
+  },
+  "voice_indonesian_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Indonesian",
+      "gender": "any"
+    }
+  },
+  "voice_indonesian_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Indonesian",
+      "gender": "female"
+    }
+  },
+  "voice_indonesian_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Indonesian",
+      "gender": "male"
+    }
+  },
+  "voice_indonesian_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Indonesian",
+      "gender": "unknown"
+    }
+  },
+  "voice_italian_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Italian",
+      "gender": "any"
+    }
+  },
+  "voice_italian_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Italian",
+      "gender": "female"
+    }
+  },
+  "voice_italian_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Italian",
+      "gender": "male"
+    }
+  },
+  "voice_italian_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Italian",
+      "gender": "unknown"
+    }
+  },
+  "voice_japanese_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Japanese",
+      "gender": "any"
+    }
+  },
+  "voice_japanese_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Japanese",
+      "gender": "female"
+    }
+  },
+  "voice_japanese_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Japanese",
+      "gender": "male"
+    }
+  },
+  "voice_japanese_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Japanese",
+      "gender": "unknown"
+    }
+  },
+  "voice_korean_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Korean",
+      "gender": "any"
+    }
+  },
+  "voice_korean_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Korean",
+      "gender": "female"
+    }
+  },
+  "voice_korean_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Korean",
+      "gender": "male"
+    }
+  },
+  "voice_korean_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Korean",
+      "gender": "unknown"
+    }
+  },
+  "voice_polish_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Polish",
+      "gender": "any"
+    }
+  },
+  "voice_polish_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Polish",
+      "gender": "female"
+    }
+  },
+  "voice_polish_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Polish",
+      "gender": "male"
+    }
+  },
+  "voice_polish_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Polish",
+      "gender": "unknown"
+    }
+  },
+  "voice_portuguese_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Portuguese",
+      "gender": "any"
+    }
+  },
+  "voice_portuguese_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Portuguese",
+      "gender": "female"
+    }
+  },
+  "voice_portuguese_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Portuguese",
+      "gender": "male"
+    }
+  },
+  "voice_portuguese_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Portuguese",
+      "gender": "unknown"
+    }
+  },
+  "voice_romanian_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Romanian",
+      "gender": "any"
+    }
+  },
+  "voice_romanian_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Romanian",
+      "gender": "female"
+    }
+  },
+  "voice_romanian_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Romanian",
+      "gender": "male"
+    }
+  },
+  "voice_romanian_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Romanian",
+      "gender": "unknown"
+    }
+  },
+  "voice_russian_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Russian",
+      "gender": "any"
+    }
+  },
+  "voice_russian_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Russian",
+      "gender": "female"
+    }
+  },
+  "voice_russian_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Russian",
+      "gender": "male"
+    }
+  },
+  "voice_russian_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Russian",
+      "gender": "unknown"
+    }
+  },
+  "voice_spanish_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Spanish",
+      "gender": "any"
+    }
+  },
+  "voice_spanish_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Spanish",
+      "gender": "female"
+    }
+  },
+  "voice_spanish_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Spanish",
+      "gender": "male"
+    }
+  },
+  "voice_spanish_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Spanish",
+      "gender": "unknown"
+    }
+  },
+  "voice_thai_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Thai",
+      "gender": "any"
+    }
+  },
+  "voice_thai_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Thai",
+      "gender": "female"
+    }
+  },
+  "voice_thai_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Thai",
+      "gender": "male"
+    }
+  },
+  "voice_thai_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Thai",
+      "gender": "unknown"
+    }
+  },
+  "voice_turkish_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Turkish",
+      "gender": "any"
+    }
+  },
+  "voice_turkish_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Turkish",
+      "gender": "female"
+    }
+  },
+  "voice_turkish_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Turkish",
+      "gender": "male"
+    }
+  },
+  "voice_turkish_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Turkish",
+      "gender": "unknown"
+    }
+  },
+  "voice_ukrainian_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Ukrainian",
+      "gender": "any"
+    }
+  },
+  "voice_ukrainian_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Ukrainian",
+      "gender": "female"
+    }
+  },
+  "voice_ukrainian_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Ukrainian",
+      "gender": "male"
+    }
+  },
+  "voice_ukrainian_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Ukrainian",
+      "gender": "unknown"
+    }
+  },
+  "voice_vietnamese_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Vietnamese",
+      "gender": "any"
+    }
+  },
+  "voice_vietnamese_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Vietnamese",
+      "gender": "female"
+    }
+  },
+  "voice_vietnamese_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Vietnamese",
+      "gender": "male"
+    }
+  },
+  "voice_vietnamese_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Vietnamese",
+      "gender": "unknown"
+    }
+  },
+  "voice_other_any": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Other",
+      "gender": "any"
+    }
+  },
+  "voice_other_female": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Other",
+      "gender": "female"
+    }
+  },
+  "voice_other_male": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Other",
+      "gender": "male"
+    }
+  },
+  "voice_other_unknown": {
+    "description": "Voice",
+    "type": "string",
+    "hint": "Changes with the language and gender above.",
+    "options": [
+      "male-qn-qingse"
+    ],
+    "labels": [
+      "male-qn-qingse"
+    ],
+    "default": "",
+    "condition": {
+      "language": "Other",
+      "gender": "unknown"
+    }
+  }
+}

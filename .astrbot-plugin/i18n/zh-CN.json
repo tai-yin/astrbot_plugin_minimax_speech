@@ -1,0 +1,688 @@
+{
+  "metadata": {
+    "display_name": "MiniMax 语音",
+    "short_desc": "让 QQ 官方机器人用 MiniMax 发送语音消息。",
+    "desc": "用 MiniMax 同步语音合成，把 QQ 官方机器人（Open Platform WebSocket / Webhook）的文字回复合成为语音消息。"
+  },
+  "config": {
+    "api_key": {
+      "description": "MiniMax API 密钥",
+      "hint": "MiniMax API 密钥。请求使用 Authorization: Bearer，并发往下方选择的 API 服务器。"
+    },
+    "api_base": {
+      "description": "API 服务器",
+      "hint": "保存后重新打开本页。音色列表从所选服务器加载，API 密钥必须由该服务器签发。",
+      "labels": [
+        "国际",
+        "中国"
+      ]
+    },
+    "model": {
+      "description": "模型",
+      "hint": "发给语音合成接口的模型。在国际和中国服务器上，HD 都比 Turbo 贵。",
+      "labels": [
+        "Speech 2.8 HD",
+        "Speech 2.8 Turbo",
+        "Speech 2.6 HD",
+        "Speech 2.6 Turbo",
+        "Speech 02 HD",
+        "Speech 02 Turbo",
+        "Speech 01 HD",
+        "Speech 01 Turbo"
+      ],
+      "subtitles": [
+        "音质更高",
+        "更快，费用更低",
+        "上一代 HD",
+        "上一代 Turbo",
+        "更早的 HD",
+        "更早的 Turbo",
+        "最早的 HD",
+        "最早的 Turbo"
+      ]
+    },
+    "reply_mode": {
+      "description": "回复方式",
+      "hint": "文字和语音会一起发送。仅语音只在整段都能朗读时去掉文字。智能模式在模型、用户语音或关键词要求时只发语音。",
+      "labels": [
+        "文字和语音",
+        "仅语音",
+        "智能"
+      ]
+    },
+    "smart_agent": {
+      "description": "让模型决定",
+      "hint": "只在 QQ 官方会话里加一句说明：更适合听的回复以 <voice-only/> 开头。这个标记会在发送前去掉。"
+    },
+    "smart_mirror_voice": {
+      "description": "用语音回复语音",
+      "hint": "用户发来语音消息时，只回复语音。"
+    },
+    "smart_keywords": {
+      "description": "语音关键词",
+      "hint": "用户消息里出现其中一句时，只回复语音。多个短语用逗号分隔。"
+    },
+    "smart_fallback": {
+      "description": "智能模式未触发时",
+      "hint": "模型、用户语音和关键词都没有要求语音时使用。只发文字会跳过语音合成。",
+      "labels": [
+        "文字和语音",
+        "只发文字"
+      ]
+    },
+    "language": {
+      "description": "语言",
+      "hint": "更改后，下方音色列表会立刻切换。语言取自音色 ID 的前缀。",
+      "labels": [
+        "任意"
+      ]
+    },
+    "gender": {
+      "description": "性别",
+      "hint": "更改后，下方音色列表会立刻切换。性别是从音色名称推断的，MiniMax 不返回性别字段。",
+      "labels": [
+        "任意",
+        "女",
+        "男",
+        "未标明"
+      ]
+    },
+    "voice_id": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_any_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_any_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_any_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_chinese_mandarin_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_chinese_mandarin_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_chinese_mandarin_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_chinese_mandarin_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_arabic_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_arabic_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_arabic_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_arabic_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_cantonese_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_cantonese_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_cantonese_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_cantonese_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_czech_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_czech_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_czech_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_czech_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_dutch_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_dutch_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_dutch_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_dutch_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_english_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_english_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_english_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_english_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_finnish_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_finnish_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_finnish_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_finnish_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_french_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_french_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_french_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_french_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_german_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_german_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_german_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_german_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_greek_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_greek_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_greek_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_greek_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_hindi_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_hindi_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_hindi_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_hindi_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_indonesian_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_indonesian_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_indonesian_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_indonesian_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_italian_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_italian_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_italian_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_italian_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_japanese_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_japanese_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_japanese_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_japanese_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_korean_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_korean_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_korean_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_korean_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_polish_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_polish_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_polish_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_polish_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_portuguese_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_portuguese_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_portuguese_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_portuguese_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_romanian_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_romanian_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_romanian_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_romanian_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_russian_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_russian_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_russian_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_russian_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_spanish_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_spanish_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_spanish_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_spanish_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_thai_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_thai_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_thai_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_thai_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_turkish_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_turkish_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_turkish_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_turkish_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_ukrainian_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_ukrainian_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_ukrainian_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_ukrainian_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_vietnamese_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_vietnamese_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_vietnamese_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_vietnamese_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_other_any": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_other_female": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_other_male": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    },
+    "voice_other_unknown": {
+      "description": "音色",
+      "hint": "随上方的语言和性别切换。"
+    }
+  },
+  "views": {
+    "voices": {
+      "title": "MiniMax 音色工作室",
+      "description": "克隆音色、用文字设计音色、试听，并在确认费用后保存。",
+      "heading": "MiniMax 音色工作室",
+      "spend": "本页累计",
+      "tab_clone": "克隆",
+      "tab_design": "设计",
+      "source": "原始音频",
+      "source_rule": "mp3、m4a 或 wav · 10 秒到 5 分钟 · 不超过 20 MB",
+      "prompt_clip": "示例片段，可选",
+      "prompt_rule": "短于 8 秒，并填写其中说的话。",
+      "drop_short": "添加一段短示例",
+      "transcript": "示例里的文字",
+      "voice_id": "音色 ID",
+      "preview": "试听文字",
+      "advanced": "高级选项",
+      "language_boost": "语言增强",
+      "expected_text": "预期文字",
+      "accuracy": "匹配阈值",
+      "noise": "降噪",
+      "volume": "音量归一化",
+      "verify_note": "克隆需要这个 MiniMax 账户先完成个人或企业认证。",
+      "design_prompt": "描述这个声音",
+      "voice_id_optional": "音色 ID，可选",
+      "voice_id_optional_hint": "留空的话，每次都会生成一个新的 ID。",
+      "shelf": "样带",
+      "empty_shelf": "这里还是空的。克隆或设计之后，会先显示为草稿。",
+      "audition": "试一句",
+      "audition_hint": "如果选的是草稿，播放前会先确认一次性费用。",
+      "voice": "音色",
+      "model": "模型",
+      "sentence": "句子",
+      "no_key_title": "先填写 API 密钥",
+      "no_key_body": "请先在插件设置里填写 API 密钥，然后重新打开这个页面。",
+      "cancel": "取消",
+      "submit_preview": "试听",
+      "submit_draft": "创建草稿",
+      "clone_fee_later": "创建草稿不会收取一次性音色费用。",
+      "design_fee_later": "设计费只在保存音色时收取。这次试听按字符计费。",
+      "another": "再来一条",
+      "counter": "{length} / {max}",
+      "voice_id_hint": "8–256 个字符，以字母开头，不能以 - 或 _ 结尾。",
+      "voice_id_ok": "这个 ID 可以使用。",
+      "voice_id_bad": "8–256 个字符，以字母开头，不能以 - 或 _ 结尾。",
+      "han_rule": "中国服务器的估算里，一个汉字计 2 个字符。",
+      "intl_rule": "国际服务器的估算把每个字符计为 1。MiniMax 没有公布确切规则。",
+      "billing": "账单",
+      "prices_checked": "标价，{date}",
+      "kind_design": "设计",
+      "take_description": "声音描述",
+      "kind_clone": "克隆",
+      "pause": "暂停",
+      "play": "播放",
+      "try": "试一句",
+      "in_use": "正在用于回复",
+      "use": "用于回复",
+      "remove": "移除",
+      "delete": "删除",
+      "draft_status": "尚未收费。MiniMax 将在 {days} 天后删除。",
+      "kept_fee": "已保存 · {fee}",
+      "kept_status": "已保存在这个账户上。",
+      "expired_status": "已过期。MiniMax 删除了这个草稿。",
+      "deleted_status": "已删除。这个音色 ID 不能再用。",
+      "keep": "保存",
+      "system_voices": "系统音色",
+      "failed": "出了点问题。",
+      "err_type": "请使用 mp3、m4a 或 wav 文件。",
+      "err_size": "音频文件超过 20 MB。",
+      "err_duration_source": "原始音频需要在 10 秒到 5 分钟之间。",
+      "err_duration_prompt": "示例音频需要短于 8 秒。",
+      "err_source": "请选择要克隆的音频。",
+      "err_prompt_pair": "示例音频和它的文字需要一起填写。",
+      "err_design_prompt": "请填写声音描述。",
+      "err_preview": "请填写试听文字。",
+      "stage_upload": "正在上传音频…",
+      "stage_clone": "正在克隆…",
+      "stage_design": "正在设计…",
+      "stage_preview": "试听好了。",
+      "confirm_keep_title": "保存这个音色？",
+      "confirm_keep_body": "MiniMax 会收取 {cost} 来保存它。",
+      "kept_done": "已保存。一次性费用已计入。",
+      "confirm_remove_title": "从列表里移除？",
+      "confirm_remove_body": "这只会从页面上移除。",
+      "confirm_delete_title": "删除这个音色？",
+      "confirm_delete_body": "删除后，MiniMax 不允许再使用这个音色 ID。",
+      "confirm_try_title": "这个草稿会被保存",
+      "confirm_try_body": "播放会收取 {fee} 的一次性费用，外加这句话的字符费。",
+      "use_done": "QQ 回复会使用这个音色。",
+      "copied": "已复制",
+      "no_bridge": "请从插件详情页打开这个页面。",
+      "chip_female": "女声",
+      "chip_male": "男声",
+      "chip_young": "年轻",
+      "chip_middle": "中年",
+      "chip_low": "低沉",
+      "chip_bright": "明亮",
+      "chip_slow": "缓慢",
+      "chip_brisk": "轻快",
+      "chip_service": "客服",
+      "chip_narration": "旁白",
+      "chip_child": "儿童",
+      "chip_elder": "老年",
+      "chip_gentle": "温柔",
+      "chip_sweet": "甜美",
+      "chip_magnetic": "磁性",
+      "chip_steady": "适中",
+      "chip_calm": "平静",
+      "chip_news": "新闻",
+      "chip_radio": "电台",
+      "phrase_female": "女声",
+      "phrase_male": "男声",
+      "phrase_young": "年轻",
+      "phrase_middle": "中年",
+      "phrase_low": "低沉温暖",
+      "phrase_bright": "明亮",
+      "phrase_slow": "语速缓慢",
+      "phrase_brisk": "语速轻快",
+      "phrase_service": "像客服",
+      "phrase_narration": "像旁白",
+      "phrase_child": "儿童",
+      "phrase_elder": "老年",
+      "phrase_gentle": "温柔",
+      "phrase_sweet": "甜美",
+      "phrase_magnetic": "富有磁性",
+      "phrase_steady": "语速适中",
+      "phrase_calm": "平静",
+      "phrase_news": "像新闻播音",
+      "phrase_radio": "像电台主播",
+      "example_1": "一位平静的年轻女声，音色低而暖，语速缓慢，像深夜电台的主持人。",
+      "example_2": "一位明亮的中年男声，语速轻快，像新闻主播。",
+      "example_3": "一个柔和的旁白，不着急，声音里带着一点笑意。",
+      "flow_open": "使用步骤",
+      "flow_dialog_title": "使用步骤",
+      "flow_close": "关闭",
+      "tip_flow": "克隆和设计音色的步骤。",
+      "flow_clone_title": "克隆的步骤",
+      "clone_step_1": "上传一段要克隆的录音。",
+      "clone_step_2": "可选：附上同一人的短示例，并写上示例里说的话。",
+      "clone_step_3": "填写试听文字并创建草稿。在样带里播放，不会收取一次性费用。",
+      "clone_step_4": "保存草稿后，才能用于 QQ 回复。7 天内没有保存的草稿会被删除。",
+      "flow_design_title": "设计的步骤",
+      "design_step_1": "描述想要的声音。短语和示例可以直接填进描述里。",
+      "design_step_2": "填写试听文字并创建草稿，然后在样带里收听。",
+      "design_step_3": "满意后再保存。设计费在保存时收取。",
+      "design_step_4": "保存之后才能用于 QQ 回复。再来一条会使用新的音色 ID。",
+      "tip_source": "MiniMax 会模仿这段录音。格式为 mp3、m4a 或 wav，10 秒到 5 分钟，不超过 20 MB。",
+      "tip_prompt": "同一人的短示例，需短于 8 秒。它用来对齐发音，并且必须和文字一起提交。",
+      "tip_transcript": "示例里说的话。只有附上示例时才需要填写。",
+      "tip_voice_id": "这个音色保存时使用的名字。8–256 个字符，以字母开头，不能以 - 或 _ 结尾。删除过的 ID 不能再用。",
+      "tip_preview": "草稿先说的这句话。按字符计费。创建草稿不会收取一次性费用。",
+      "tip_advanced": "对原始录音的可选检查。没有需要时可以不动。",
+      "tip_boost": "让 MiniMax 优先的语言，例如 Chinese 或 English。留空则由 MiniMax 判断。",
+      "tip_expected": "你认为原始录音里说的内容，最多 200 个字符。MiniMax 会拿音频和这段文字对比。",
+      "tip_accuracy": "录音和预期文字需要有多接近，范围 0 到 1。留空则使用 MiniMax 的默认值 0.7。",
+      "tip_noise": "克隆前去掉原始录音里的背景噪声。录音不吵时保持关闭。",
+      "tip_volume": "克隆前把原始录音的响度拉齐。",
+      "tip_clone_submit": "创建草稿并生成试听。一次性克隆费只在保存音色时收取。",
+      "tip_design_prompt": "说明是谁在说话、怎么说：年龄、音高、语速和情绪。最多 2000 个字符。",
+      "tip_chips": "把这个短语加进描述。",
+      "tip_examples": "用这个示例替换当前描述。",
+      "tip_design_preview": "草稿先说的这句话，最多 500 个字符。按字符计费。设计费要等到保存时才收取。",
+      "tip_design_id": "留空的话，每条样带都会得到一个新 ID。删除过的 ID 不能再用。",
+      "tip_design_submit": "用描述和试听文字创建一条草稿。",
+      "tip_another": "用同一段描述再创建一条草稿，并使用新的音色 ID。",
+      "tip_audition_voice": "用来读这句话的音色。如果选的是草稿，播放前会先确认一次性费用。",
+      "tip_audition_model": "读这句话使用的语音模型。HD 的单字符价格高于 Turbo。",
+      "tip_audition_text": "你自己写的句子，最多 1000 个字符。按钮上的估算是字符费用。",
+      "tip_audition_play": "用选中的音色和模型读出这句话。",
+      "tip_play": "播放这条音色已保存的试听。不会收取一次性费用。",
+      "tip_keep": "把这条草稿保存到账户。会收取一次性费用，外加一句短试听。",
+      "tip_try": "在下方的栏里，为这个音色输入自己的句子。",
+      "tip_use": "让 QQ 回复使用这个音色。草稿需要先保存。",
+      "tip_delete": "在 MiniMax 删除这个音色。这个 ID 不能再使用。",
+      "tip_remove": "只从列表里去掉这一行，不会再次请求 MiniMax。",
+      "tip_drop_draft": "把这条未保存的试听从本页拿掉。MiniMax 会在 7 天后自行丢弃它，在此之前这个音色 ID 仍然被占用。",
+      "confirm_drop_title": "移除这个试听？",
+      "confirm_drop_body": "MiniMax 不能删除还没保存的试听。它会自行过期，在此之前这个音色 ID 仍然被占用。这里只是从页面上拿掉。",
+      "preview_removed": "已从本页移除。未保存的试听会由 MiniMax 自行丢弃。"
+    }
+  }
+}

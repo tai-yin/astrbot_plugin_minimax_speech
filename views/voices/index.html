@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MiniMax Voice studio</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="page">
+    <div class="studio">
+      <header class="mast">
+        <div class="mast-title">
+          <div class="title-row">
+            <h1 id="heading"></h1>
+            <button type="button" id="flow-open"></button>
+          </div>
+          <p class="eyebrow" id="eyebrow"></p>
+        </div>
+        <div class="spend" id="spend">
+          <span class="spend-label" id="spend-label"></span>
+          <strong class="spend-value" id="spend-value"></strong>
+          <a class="billing" id="billing" target="_blank" rel="noreferrer"></a>
+          <a class="prices" id="prices" target="_blank" rel="noreferrer"></a>
+        </div>
+      </header>
+      <p class="banner" id="warning" role="status" hidden></p>
+
+      <section class="gate" id="gate" hidden>
+        <h2 id="gate-title"></h2>
+        <p id="gate-body"></p>
+      </section>
+
+      <div class="workspace" id="workspace" hidden>
+        <p class="stage" id="stage" role="status"></p>
+        <section class="console">
+          <div class="tabs" role="tablist" id="tabs">
+            <button type="button" id="tab-clone" role="tab" aria-selected="true" aria-controls="panel-clone"></button>
+            <button type="button" id="tab-design" role="tab" aria-selected="false" aria-controls="panel-design"></button>
+          </div>
+
+          <div id="panel-clone" role="tabpanel">
+            <label class="drop" id="source-drop">
+              <input id="source-file" type="file" accept=".mp3,.m4a,.wav,audio/mpeg,audio/mp4,audio/wav" />
+              <span class="drop-title" id="source-title"></span>
+              <span class="drop-hint" id="source-hint"></span>
+              <span class="drop-file" id="source-name"></span>
+            </label>
+
+            <label class="field">
+              <span id="prompt-label"></span>
+              <span class="hint" id="prompt-hint"></span>
+            </label>
+            <label class="drop drop-small" id="prompt-drop">
+              <input id="prompt-file" type="file" accept=".mp3,.m4a,.wav,audio/mpeg,audio/mp4,audio/wav" />
+              <span class="drop-title" id="prompt-title"></span>
+              <span class="drop-file" id="prompt-name"></span>
+            </label>
+            <label class="field" id="transcript-field">
+              <span id="transcript-label"></span>
+              <textarea id="transcript" rows="2"></textarea>
+            </label>
+
+            <label class="field" id="clone-id-field">
+              <span id="clone-id-label"></span>
+              <input id="clone-id" type="text" autocomplete="off" spellcheck="false" />
+              <span class="hint" id="clone-id-hint"></span>
+            </label>
+            <label class="field" id="clone-preview-field">
+              <span id="clone-preview-label"></span>
+              <textarea id="clone-preview" rows="3" maxlength="1000"></textarea>
+              <span class="counter" id="clone-count"></span>
+            </label>
+
+            <details class="advanced" id="advanced">
+              <summary id="advanced-label"></summary>
+              <label class="field" id="boost-field">
+                <span id="boost-label"></span>
+                <input id="boost" type="text" autocomplete="off" />
+              </label>
+              <label class="field" id="expected-field">
+                <span id="expected-label"></span>
+                <textarea id="expected" rows="2" maxlength="200"></textarea>
+              </label>
+              <label class="field" id="accuracy-field">
+                <span id="accuracy-label"></span>
+                <input id="accuracy" type="number" min="0" max="1" step="0.05" placeholder="0.7" />
+              </label>
+              <label class="check" id="noise-check"><input id="noise" type="checkbox" /><span id="noise-label"></span></label>
+              <label class="check" id="volume-check"><input id="volume" type="checkbox" /><span id="volume-label"></span></label>
+            </details>
+
+            <button type="button" class="primary" id="clone-submit"></button>
+            <p class="note" id="clone-note"></p>
+            <p class="note" id="verify-note"></p>
+          </div>
+
+          <div id="panel-design" role="tabpanel" hidden>
+            <label class="field" id="design-prompt-field">
+              <span id="design-prompt-label"></span>
+              <textarea id="design-prompt" rows="4" maxlength="2000"></textarea>
+              <span class="counter" id="design-prompt-count"></span>
+            </label>
+            <div class="chips" id="chips"></div>
+            <div class="examples" id="examples"></div>
+            <label class="field" id="design-preview-field">
+              <span id="design-preview-label"></span>
+              <textarea id="design-preview" rows="3" maxlength="500"></textarea>
+              <span class="counter" id="design-count"></span>
+            </label>
+            <label class="field" id="design-id-field">
+              <span id="design-id-label"></span>
+              <input id="design-id" type="text" autocomplete="off" spellcheck="false" placeholder="" />
+              <span class="hint" id="design-id-hint"></span>
+            </label>
+            <div class="actions">
+              <button type="button" class="primary" id="design-submit"></button>
+              <button type="button" class="quiet" id="another"></button>
+            </div>
+            <p class="note" id="design-note"></p>
+          </div>
+        </section>
+
+        <section class="shelf" aria-labelledby="shelf-label">
+          <div class="shelf-body">
+            <h2 id="shelf-label"></h2>
+            <p class="empty" id="empty" hidden></p>
+            <div id="takes"></div>
+          </div>
+        </section>
+      </div>
+
+    <form class="audition" id="audition" hidden>
+      <div class="audition-head">
+        <h2 id="audition-label"></h2>
+        <p class="hint" id="audition-hint"></p>
+      </div>
+      <label class="field" id="audition-voice-field">
+        <span id="audition-voice-label"></span>
+        <select id="audition-voice"></select>
+      </label>
+      <label class="field" id="audition-model-field">
+        <span id="audition-model-label"></span>
+        <select id="audition-model"></select>
+      </label>
+      <label class="field audition-sentence" id="audition-text-field">
+        <span id="audition-text-label"></span>
+        <input id="audition-text" type="text" maxlength="1000" autocomplete="off" />
+      </label>
+      <button type="submit" class="primary" id="audition-play"></button>
+    </form>
+    </div>
+    </div>
+
+    <dialog id="flow">
+      <form method="dialog">
+        <h2 id="flow-dialog-title"></h2>
+        <h3 class="flow-title" id="clone-flow-title"></h3>
+        <ol class="flow">
+          <li id="clone-step-1"></li>
+          <li id="clone-step-2"></li>
+          <li id="clone-step-3"></li>
+          <li id="clone-step-4"></li>
+        </ol>
+        <h3 class="flow-title" id="design-flow-title"></h3>
+        <ol class="flow">
+          <li id="design-step-1"></li>
+          <li id="design-step-2"></li>
+          <li id="design-step-3"></li>
+          <li id="design-step-4"></li>
+        </ol>
+        <div class="dialog-actions">
+          <button type="submit" class="primary" id="flow-close"></button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="confirm">
+      <form method="dialog">
+        <h2 id="confirm-title"></h2>
+        <p id="confirm-body"></p>
+        <div class="dialog-actions">
+          <button type="submit" class="quiet" value="cancel" id="confirm-cancel"></button>
+          <button type="submit" class="primary" value="ok" id="confirm-ok"></button>
+        </div>
+      </form>
+    </dialog>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

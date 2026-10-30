@@ -1,0 +1,688 @@
+{
+  "metadata": {
+    "display_name": "MiniMax Speech",
+    "short_desc": "Send MiniMax voice messages from a QQ official bot.",
+    "desc": "Turn QQ official bot text replies into voice messages with MiniMax synchronous speech. Supports the Open Platform WebSocket and Webhook adapters."
+  },
+  "config": {
+    "api_key": {
+      "description": "MiniMax API Key",
+      "hint": "MiniMax API key. Requests use Authorization: Bearer and the API host selected below."
+    },
+    "api_base": {
+      "description": "API host",
+      "hint": "Save, then reopen this page. The voice list is loaded from the selected host, and the API key must be issued for that host.",
+      "labels": [
+        "International",
+        "China"
+      ]
+    },
+    "model": {
+      "description": "Model",
+      "hint": "Speech model sent to T2A. HD costs more than Turbo on both hosts.",
+      "labels": [
+        "Speech 2.8 HD",
+        "Speech 2.8 Turbo",
+        "Speech 2.6 HD",
+        "Speech 2.6 Turbo",
+        "Speech 02 HD",
+        "Speech 02 Turbo",
+        "Speech 01 HD",
+        "Speech 01 Turbo"
+      ],
+      "subtitles": [
+        "Higher quality",
+        "Faster and lower cost",
+        "Previous HD",
+        "Previous Turbo",
+        "Older HD",
+        "Older Turbo",
+        "Oldest HD",
+        "Oldest Turbo"
+      ]
+    },
+    "reply_mode": {
+      "description": "Reply mode",
+      "hint": "Text and voice sends both. Voice only drops the text when the whole reply can be spoken. Smart speaks alone when the model, a voice message, or a keyword asks for it.",
+      "labels": [
+        "Text and voice",
+        "Voice only",
+        "Smart"
+      ]
+    },
+    "smart_agent": {
+      "description": "Let the model choose",
+      "hint": "Adds one instruction on QQ official chats: start a reply with <voice-only/> when it is better heard than read. The marker is removed before the message is sent."
+    },
+    "smart_mirror_voice": {
+      "description": "Answer voice with voice",
+      "hint": "When the user sends a voice message, reply with voice only."
+    },
+    "smart_keywords": {
+      "description": "Voice keywords",
+      "hint": "If the user's message contains one of these, reply with voice only. Separate phrases with commas."
+    },
+    "smart_fallback": {
+      "description": "When smart does not trigger",
+      "hint": "Used when the model, the user's voice, and the keywords all stay quiet. Text only skips the speech call.",
+      "labels": [
+        "Text and voice",
+        "Text only"
+      ]
+    },
+    "language": {
+      "description": "Language",
+      "hint": "The voice list updates when this changes. Taken from the voice id prefix.",
+      "labels": [
+        "Any"
+      ]
+    },
+    "gender": {
+      "description": "Gender",
+      "hint": "The voice list updates when this changes. Inferred from the voice name.",
+      "labels": [
+        "Any",
+        "Female",
+        "Male",
+        "Unspecified"
+      ]
+    },
+    "voice_id": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_any_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_any_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_any_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_chinese_mandarin_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_chinese_mandarin_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_chinese_mandarin_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_chinese_mandarin_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_arabic_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_arabic_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_arabic_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_arabic_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_cantonese_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_cantonese_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_cantonese_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_cantonese_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_czech_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_czech_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_czech_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_czech_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_dutch_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_dutch_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_dutch_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_dutch_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_english_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_english_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_english_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_english_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_finnish_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_finnish_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_finnish_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_finnish_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_french_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_french_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_french_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_french_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_german_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_german_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_german_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_german_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_greek_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_greek_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_greek_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_greek_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_hindi_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_hindi_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_hindi_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_hindi_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_indonesian_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_indonesian_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_indonesian_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_indonesian_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_italian_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_italian_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_italian_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_italian_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_japanese_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_japanese_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_japanese_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_japanese_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_korean_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_korean_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_korean_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_korean_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_polish_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_polish_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_polish_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_polish_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_portuguese_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_portuguese_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_portuguese_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_portuguese_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_romanian_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_romanian_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_romanian_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_romanian_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_russian_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_russian_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_russian_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_russian_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_spanish_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_spanish_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_spanish_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_spanish_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_thai_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_thai_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_thai_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_thai_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_turkish_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_turkish_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_turkish_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_turkish_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_ukrainian_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_ukrainian_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_ukrainian_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_ukrainian_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_vietnamese_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_vietnamese_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_vietnamese_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_vietnamese_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_other_any": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_other_female": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_other_male": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    },
+    "voice_other_unknown": {
+      "description": "Voice",
+      "hint": "Changes with the language and gender above."
+    }
+  },
+  "views": {
+    "voices": {
+      "title": "MiniMax Voice studio",
+      "description": "Clone a voice, design one from a description, preview it, and keep it.",
+      "heading": "MiniMax Voice studio",
+      "spend": "From this page",
+      "tab_clone": "Clone",
+      "tab_design": "Design",
+      "source": "Source audio",
+      "source_rule": "mp3, m4a, or wav · 10 seconds to 5 minutes · up to 20 MB",
+      "prompt_clip": "Example clip, optional",
+      "prompt_rule": "Under 8 seconds, with the words spoken in it.",
+      "drop_short": "Add a short example",
+      "transcript": "Transcript of the example",
+      "voice_id": "Voice id",
+      "preview": "Preview sentence",
+      "advanced": "Advanced",
+      "language_boost": "Language boost",
+      "expected_text": "Expected transcript",
+      "accuracy": "Match threshold",
+      "noise": "Reduce noise",
+      "volume": "Normalize volume",
+      "verify_note": "Cloning needs individual or enterprise verification on this MiniMax account.",
+      "design_prompt": "Describe the voice",
+      "voice_id_optional": "Voice id, optional",
+      "voice_id_optional_hint": "Leave this blank and each take gets its own id.",
+      "shelf": "Takes",
+      "empty_shelf": "Nothing here yet. A clone or a design will show up as a draft.",
+      "audition": "Try a sentence",
+      "audition_hint": "A draft voice asks before it charges the one-time fee.",
+      "voice": "Voice",
+      "model": "Model",
+      "sentence": "Sentence",
+      "no_key_title": "Add an API key",
+      "no_key_body": "Add an API key in this plugin's settings, then reload the page.",
+      "cancel": "Cancel",
+      "submit_preview": "Preview",
+      "submit_draft": "Create draft",
+      "clone_fee_later": "Creating a draft does not charge the one-time voice fee.",
+      "design_fee_later": "The design fee is charged only when you keep the voice. This preview is billed by the character.",
+      "another": "Another take",
+      "counter": "{length} / {max}",
+      "voice_id_hint": "8–256 characters, starts with a letter, cannot end with - or _.",
+      "voice_id_ok": "This id can be used.",
+      "voice_id_bad": "8–256 characters, starts with a letter, cannot end with - or _.",
+      "han_rule": "On the China host a Chinese character counts as 2 in these estimates.",
+      "intl_rule": "International estimates count every character as 1. MiniMax has not published the exact rule.",
+      "billing": "Billing",
+      "prices_checked": "List prices, {date}",
+      "kind_design": "Design",
+      "take_description": "Voice description",
+      "kind_clone": "Clone",
+      "pause": "Pause",
+      "play": "Play",
+      "try": "Try a sentence",
+      "in_use": "Used for replies",
+      "use": "Use for replies",
+      "remove": "Remove",
+      "delete": "Delete",
+      "draft_status": "Not charged yet. Deleted by MiniMax in {days} days.",
+      "kept_fee": "Saved · {fee}",
+      "kept_status": "Saved on this account.",
+      "expired_status": "Expired. MiniMax deleted this draft.",
+      "deleted_status": "Deleted. This voice id cannot be reused.",
+      "keep": "Keep",
+      "system_voices": "System voices",
+      "failed": "Something went wrong.",
+      "err_type": "Use an mp3, m4a, or wav file.",
+      "err_size": "The audio file is larger than 20 MB.",
+      "err_duration_source": "Source audio must be between 10 seconds and 5 minutes.",
+      "err_duration_prompt": "The example clip must be shorter than 8 seconds.",
+      "err_source": "Choose the source audio.",
+      "err_prompt_pair": "The example clip and its transcript must be sent together.",
+      "err_design_prompt": "Describe the voice.",
+      "err_preview": "Preview text is required.",
+      "stage_upload": "Uploading audio…",
+      "stage_clone": "Cloning…",
+      "stage_design": "Designing…",
+      "stage_preview": "Preview ready.",
+      "confirm_keep_title": "Keep this voice?",
+      "confirm_keep_body": "MiniMax charges {cost} to save this voice.",
+      "kept_done": "Saved. The one-time fee has been charged.",
+      "confirm_remove_title": "Remove this from the list?",
+      "confirm_remove_body": "This only removes it from the page.",
+      "confirm_delete_title": "Delete this voice?",
+      "confirm_delete_body": "MiniMax will not let you use this voice id again.",
+      "confirm_try_title": "This draft will be saved",
+      "confirm_try_body": "Playing it charges the {fee} one-time fee, plus the sentence.",
+      "use_done": "QQ replies will use this voice.",
+      "copied": "Copied",
+      "no_bridge": "Open this page from the plugin detail screen.",
+      "chip_female": "Female",
+      "chip_male": "Male",
+      "chip_young": "Young",
+      "chip_middle": "Middle-aged",
+      "chip_low": "Low",
+      "chip_bright": "Bright",
+      "chip_slow": "Slow",
+      "chip_brisk": "Brisk",
+      "chip_service": "Support",
+      "chip_narration": "Narration",
+      "chip_child": "Child",
+      "chip_elder": "Elder",
+      "chip_gentle": "Gentle",
+      "chip_sweet": "Sweet",
+      "chip_magnetic": "Magnetic",
+      "chip_steady": "Steady",
+      "chip_calm": "Calm",
+      "chip_news": "News",
+      "chip_radio": "Radio",
+      "phrase_female": "a woman",
+      "phrase_male": "a man",
+      "phrase_young": "young",
+      "phrase_middle": "middle-aged",
+      "phrase_low": "low and warm",
+      "phrase_bright": "bright",
+      "phrase_slow": "speaking slowly",
+      "phrase_brisk": "speaking briskly",
+      "phrase_service": "like a support agent",
+      "phrase_narration": "like a narrator",
+      "phrase_child": "a child",
+      "phrase_elder": "elderly",
+      "phrase_gentle": "gentle",
+      "phrase_sweet": "sweet",
+      "phrase_magnetic": "magnetic",
+      "phrase_steady": "speaking at an easy pace",
+      "phrase_calm": "calm",
+      "phrase_news": "like a news anchor",
+      "phrase_radio": "like a radio host",
+      "example_1": "A calm young woman, low and warm, speaking slowly like a late-night radio host.",
+      "example_2": "A bright middle-aged man speaking briskly, like a news anchor.",
+      "example_3": "A soft narrator, unhurried, with a little smile in the voice.",
+      "flow_open": "How it works",
+      "flow_dialog_title": "How this works",
+      "flow_close": "Close",
+      "tip_flow": "The steps for cloning a recording and designing a voice.",
+      "flow_clone_title": "How cloning works",
+      "clone_step_1": "Upload a recording of the voice to copy.",
+      "clone_step_2": "Optionally add a short clip of that voice, and type the words spoken in it.",
+      "clone_step_3": "Write a preview sentence and create a draft. Playing it from the list does not charge the one-time fee.",
+      "clone_step_4": "Keep the draft to save it, then use it for QQ replies. An unused draft is removed after 7 days.",
+      "flow_design_title": "How designing works",
+      "design_step_1": "Describe the voice. The phrases and examples can fill this in.",
+      "design_step_2": "Write a preview sentence, create a draft, and listen to it in the list.",
+      "design_step_3": "Keep the one you want. The design fee is charged when you keep it.",
+      "design_step_4": "Use the saved voice for QQ replies. Another take starts a new voice id.",
+      "tip_source": "The recording MiniMax copies. mp3, m4a, or wav, from 10 seconds to 5 minutes, up to 20 MB.",
+      "tip_prompt": "Optional clip of the same person, under 8 seconds. It teaches pronunciation, and it must be sent with the transcript.",
+      "tip_transcript": "The words spoken in the example clip. Fill this in only when a clip is attached.",
+      "tip_voice_id": "The name stored for this voice. 8–256 characters, starts with a letter, and cannot end with - or _. A deleted id cannot be reused.",
+      "tip_preview": "The first line this draft speaks. Billed by the character. Creating the draft does not charge the one-time fee.",
+      "tip_advanced": "Optional checks on the source recording. Leave these alone unless the audio needs them.",
+      "tip_boost": "A language for MiniMax to favor, such as Chinese or English. Leave this blank to let MiniMax decide.",
+      "tip_expected": "What you think the source recording says, up to 200 characters. MiniMax compares the audio with this text.",
+      "tip_accuracy": "How closely the recording must match the expected transcript, from 0 to 1. Empty uses MiniMax's default, 0.7.",
+      "tip_noise": "Remove background noise from the source before cloning. Leave this off unless the recording is noisy.",
+      "tip_volume": "Even out the loudness of the source before cloning.",
+      "tip_clone_submit": "Create a draft and generate the preview. The one-time clone fee is charged only when you keep the voice.",
+      "tip_design_prompt": "Who is speaking, and how: age, pitch, pace, and mood. Up to 2000 characters.",
+      "tip_chips": "Add this phrase to the description.",
+      "tip_examples": "Replace the description with this example.",
+      "tip_design_preview": "The first line this draft speaks, up to 500 characters. Billed by the character. The design fee waits until you keep the voice.",
+      "tip_design_id": "Leave this blank and each take gets a new id. A deleted id cannot be reused.",
+      "tip_design_submit": "Create a draft from the description and the preview sentence.",
+      "tip_another": "Create another draft with a new voice id, using the same description.",
+      "tip_audition_voice": "The voice that speaks the sentence. A draft asks you to confirm the one-time fee before it plays.",
+      "tip_audition_model": "The speech model for this sentence. HD costs more per character than Turbo.",
+      "tip_audition_text": "Your own sentence, up to 1000 characters. The estimate on the button is the character cost.",
+      "tip_audition_play": "Speak the sentence with the selected voice and model.",
+      "tip_play": "Play the preview stored for this voice. This does not charge the one-time fee.",
+      "tip_keep": "Save this draft on the account. This charges the one-time fee plus one short sentence.",
+      "tip_try": "Type your own sentence for this voice in the bar below.",
+      "tip_use": "Make QQ replies use this voice. A draft has to be kept first.",
+      "tip_delete": "Delete this voice at MiniMax. The id cannot be used again.",
+      "tip_remove": "Drop this row from the list. MiniMax is not called again.",
+      "tip_drop_draft": "Take this unsaved preview off the page. MiniMax drops it on its own after 7 days, and the id stays reserved until then.",
+      "confirm_drop_title": "Remove this preview?",
+      "confirm_drop_body": "MiniMax cannot delete an unsaved preview. It expires on its own, and the voice id stays reserved until then. This only removes it from the page.",
+      "preview_removed": "Removed from this page. MiniMax drops an unsaved preview on its own."
+    }
+  }
+}
